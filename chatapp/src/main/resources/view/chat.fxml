@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="650.0"
+            prefWidth="1000.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chatapp.client.ChatController"
+            styleClass="background">
+
+    <left>
+
+        <VBox spacing="15"
+              prefWidth="280"
+              styleClass="sidebar">
+
+            <Label text="Messages"
+                   styleClass="chat-title"/>
+
+            <TextField fx:id="searchField"
+                       promptText="Search username"
+                       styleClass="search-input"/>
+
+            <Button text="Search"
+                    onAction="#searchUser"
+                    styleClass="button-primary"/>
+
+            <ListView fx:id="usersList"
+                      VBox.vgrow="ALWAYS"
+                      styleClass="user-list"/>
+
+        </VBox>
+
+    </left>
+
+    <center>
+
+        <VBox spacing="15"
+              style="-fx-padding: 20;">
+
+            <Label text="Chat"
+                   styleClass="chat-title"/>
+
+            <TextArea fx:id="chatArea"
+                      editable="false"
+                      VBox.vgrow="ALWAYS"
+                      styleClass="chat-area"/>
+
+            <HBox spacing="10">
+
+                <TextField fx:id="messageField"
+                           promptText="Type message..."
+                           HBox.hgrow="ALWAYS"
+                           styleClass="message-input"/>
+
+                <Button text="Send"
+                        onAction="#sendMessage"
+                        styleClass="button-primary"/>
+
+            </HBox>
+
+        </VBox>
+
+    </center>
+
+</BorderPane>

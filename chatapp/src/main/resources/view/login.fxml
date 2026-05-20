@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="500.0"
+            prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chatapp.client.LoginController"
+            styleClass="background">
+
+    <children>
+
+        <VBox spacing="15"
+              alignment="CENTER"
+              AnchorPane.leftAnchor="250"
+              AnchorPane.rightAnchor="250"
+              AnchorPane.topAnchor="90">
+
+            <Label text="Chat App"
+                   styleClass="title"/>
+
+            <Label text="Welcome Back"
+                   styleClass="subtitle"/>
+
+            <TextField fx:id="usernameField"
+                       promptText="Username"
+                       styleClass="input"/>
+
+            <PasswordField fx:id="passwordField"
+                           promptText="Password"
+                           styleClass="input"/>
+
+            <Button text="Login"
+                    onAction="#login"
+                    styleClass="button-primary"/>
+
+            <Button text="Create Account"
+                    onAction="#openRegister"
+                    styleClass="button-secondary"/>
+
+        </VBox>
+
+    </children>
+
+</AnchorPane>
