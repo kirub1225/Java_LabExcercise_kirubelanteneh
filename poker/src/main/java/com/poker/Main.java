@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -16,6 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application {
+
+    private Stage window;
+    private Scene welcomeScene;
+    private Scene gameScene;
+    private Scene instructionsScene;
 
     private final DeckEngine deck = new DeckEngine();
     private final List<Card> playerHand = new ArrayList<>();
@@ -30,11 +36,93 @@ public class Main extends Application {
     private final CheckBox[] playerInteractiveCards = new CheckBox[5];
 
     private final Label scoreboardHUD = new Label();
-    private final Label communicationConsole = new Label("Welcome to JavaFX Video Poker. Press Deal to play!");
+    private final Label communicationConsole = new Label("Welcome to Kira Poker Games. Press Deal to play!");
     private final Button masterActionButton = new Button("DEAL HAND");
 
     @Override
     public void start(Stage primaryWindow) {
+        this.window = primaryWindow;
+
+        buildWelcomeDashboard();
+        buildInstructionScreen();
+        buildGameLayoutTable();
+
+        window.setTitle("Kira Poker Games");
+        window.setScene(welcomeScene);
+        window.show();
+    }
+
+    private void buildWelcomeDashboard() {
+        VBox menuRack = new VBox(25);
+        menuRack.setAlignment(Pos.CENTER);
+        menuRack.setStyle("-fx-background-color: #1e272e;");
+        menuRack.setPadding(new Insets(40));
+
+        Label brandTitle = new Label("KIRA POKER GAMES");
+        brandTitle.setStyle("-fx-text-fill: #f5cd79; -fx-font-size: 34px; -fx-font-family: 'Impact'; -fx-letter-spacing: 2px;");
+
+        Label brandSubtitle = new Label("Premium 5-Card Draw Edition");
+        brandSubtitle.setStyle("-fx-text-fill: #ffffff; -fx-font-size: 14px; -fx-font-family: 'Verdana'; -fx-font-style: italic;");
+
+        Button launchGameBtn = new Button("START GAME");
+        launchGameBtn.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-base: #2ecc71; -fx-text-fill: white; -fx-padding: 12px 40px; -fx-background-radius: 20px;");
+        launchGameBtn.setOnAction(e -> window.setScene(gameScene));
+
+        Button viewRulesBtn = new Button("HOW TO PLAY");
+        viewRulesBtn.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-base: #34495e; -fx-text-fill: white; -fx-padding: 10px 35px; -fx-background-radius: 20px;");
+        viewRulesBtn.setOnAction(e -> window.setScene(instructionsScene));
+
+        menuRack.getChildren().addAll(brandTitle, brandSubtitle, launchGameBtn, viewRulesBtn);
+        welcomeScene = new Scene(menuRack, 650, 480);
+    }
+
+    private void buildInstructionScreen() {
+        BorderPane coreFrame = new BorderPane();
+        coreFrame.setStyle("-fx-background-color: #2c3e50;");
+        coreFrame.setPadding(new Insets(25));
+
+        Label ruleHeader = new Label("GAMEPLAY GUIDE & INSTRUCTIONS");
+        ruleHeader.setStyle("-fx-text-fill: #f1c40f; -fx-font-size: 20px; -fx-font-weight: bold; -fx-font-family: 'Verdana';");
+        BorderPane.setAlignment(ruleHeader, Pos.CENTER);
+        coreFrame.setTop(ruleHeader);
+
+        VBox contentScrollerBox = new VBox(15);
+        contentScrollerBox.setStyle("-fx-background-color: #34495e; -fx-padding: 20px; -fx-background-radius: 10px;");
+
+        String rulesText =
+                "1. ANTE & ENTRY\n" +
+                        "Every round costs a fixed ante of $15 chips extracted from your wallet bankroll.\n\n" +
+                        "2. THE INITIAL DEAL\n" +
+                        "You and the CPU opponent are both assigned 5 random private cards from a shuffled 52-card deck.\n\n" +
+                        "3. STRATEGY DISCARD PHASE\n" +
+                        "Examine your hand. Check the boxes underneath cards you want to HOLD. Any card left unchecked will be destroyed and swapped for a fresh drawing block.\n\n" +
+                        "4. AUTOMATED AI COMPETITOR\n" +
+                        "The computer scans its cards using dynamic ranking filters. It automatically locks pairs and exchanges orphan single cards to attempt to maximize its scoring margin.\n\n" +
+                        "5. FINAL SHOWDOWN COMPARISON\n" +
+                        "Hands are weighed utilizing classic evaluation values (Pairs, Straights, Flushes, Full Houses). The superior combinations collect the pooled round table pot.";
+
+        Label textContent = new Label(rulesText);
+        textContent.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 13px; -fx-font-family: 'Monospaced'; -fx-wrap-text: true;");
+        contentScrollerBox.getChildren().add(textContent);
+
+        ScrollPane trackScroll = new ScrollPane(contentScrollerBox);
+        trackScroll.setFitToWidth(true);
+        trackScroll.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+        coreFrame.setCenter(trackScroll);
+
+        Button returnHomeBtn = new Button("RETURN TO MAIN MENU");
+        returnHomeBtn.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-base: #e74c3c; -fx-text-fill: white; -fx-padding: 8px 25px;");
+        returnHomeBtn.setOnAction(e -> window.setScene(welcomeScene));
+
+        VBox bottomAnchor = new VBox(returnHomeBtn);
+        bottomAnchor.setAlignment(Pos.CENTER);
+        bottomAnchor.setPadding(new Insets(15, 0, 0, 0));
+        coreFrame.setBottom(bottomAnchor);
+
+        instructionsScene = new Scene(coreFrame, 650, 480);
+    }
+
+    private void buildGameLayoutTable() {
         BorderPane rootLayout = new BorderPane();
         rootLayout.setStyle("-fx-background-color: #1b4d3e;");
         rootLayout.setPadding(new Insets(20));
@@ -85,16 +173,19 @@ public class Main extends Application {
 
         communicationConsole.setStyle("-fx-text-fill: #ffffff; -fx-font-size: 14px; -fx-font-style: italic;");
         masterActionButton.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-base: #2980b9; -fx-text-fill: white; -fx-padding: 10px 30px;");
-
         masterActionButton.setOnAction(e -> handleMasterActionCycle());
 
-        interfaceControls.getChildren().addAll(communicationConsole, masterActionButton);
+        Button exitToMenuBtn = new Button("Back to Menu");
+        exitToMenuBtn.setStyle("-fx-font-size: 12px; -fx-base: #7f8c8d; -fx-text-fill: white;");
+        exitToMenuBtn.setOnAction(e -> window.setScene(welcomeScene));
+
+        HBox buttonRack = new HBox(20, masterActionButton, exitToMenuBtn);
+        buttonRack.setAlignment(Pos.CENTER);
+
+        interfaceControls.getChildren().addAll(communicationConsole, buttonRack);
         rootLayout.setBottom(interfaceControls);
 
-        Scene mainScene = new Scene(rootLayout, 650, 480);
-        primaryWindow.setTitle("Modern JavaFX Poker Suite");
-        primaryWindow.setScene(mainScene);
-        primaryWindow.show();
+        gameScene = new Scene(rootLayout, 650, 480);
     }
 
     private void handleMasterActionCycle() {
